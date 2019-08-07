@@ -1,3 +1,7 @@
+from pylasClasses import PylasDict
+import pylasRegex
+
+
 def createObjectFromLasString(singleLineString:str) -> dict:
     """
     TLDR;Separates each piece of a las file line into an object/dict that can be
@@ -9,9 +13,26 @@ def createObjectFromLasString(singleLineString:str) -> dict:
     be appended to a larger object/dict.
     """
     try:
-        pass
-    except:
-        pass
+        mnem = pylasRegex.getMnemonicKeyFromString(singleLineString)
+        val = pylasRegex.getMnemonicValueFromString(singleLineString)
+        units = pylasRegex.getUnitsFromString(singleLineString)
+        desc = pylasRegex.getDescriptionFromString(singleLineString)
+
+        output = {}
+        if mnem:
+            output["Mnemonic"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(mnem)
+        if val:
+            output["Value"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(val)
+        if units:
+            output["Unit"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(units)
+        if desc:
+            output["Description"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(desc)
+
+        return PylasDict(output)
+
+    except Exception as e:
+        base_error_message = "\n\n[createObjectFromLasString]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
+        print(e, base_error_message, repr(e))
 
 
 def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
@@ -42,7 +63,7 @@ def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
             elif "a  depth" in lowercase_line:
                 sectionStrings["Curves"] = line
 
-        return sectionStrings
+        return PylasDict(sectionStrings)
 
     except Exception as e:
         raise e

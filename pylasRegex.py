@@ -42,7 +42,7 @@ def getMnemonicValueFromString(string:str) -> list:
       >>    [original solution] (?<=. ).*?(?=:)
       >>    (?<=.) .*?:
       >>    (?<=.) .*(?=\s*:)
-    Grabs the value of the mnemonic from a las file line. In the following example, "FT" is returned:
+    Grabs the value of the mnemonic from a las file line. In the following example, "Lat: 40.487717--Long: -80.733858----" is returned:
     "LOC.           Lat: 40.487717--Long: -80.733858----: LOCATION"
     """
     res = re.findall(r"(?<=.) .*(?=\s*:)", string)
