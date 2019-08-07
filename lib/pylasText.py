@@ -72,7 +72,9 @@ def splitLasSections(lasFileString: str) -> dict:
 def getVersionLine(versionBlockString: str) -> str:
     """ 
     The raw version information is 3 lines, which contain the (1) las file version
-    as well as (2) whether or not the las file is wrapped. This method gets the Version Info
+    as well as (2) whether or not the las file is wrapped, ((3) is the header line). 
+    
+    This method gets the Version Info
     """
     if "version information" in versionBlockString.split("\n")[0].lower():
         return versionBlockString.split("\n")[1]
@@ -83,7 +85,9 @@ def getVersionLine(versionBlockString: str) -> str:
 def getWrapLine(versionBlockString: str) -> str:
     """ 
     The raw version information is 3 lines, which contain the (1) las file version
-    as well as (2) whether or not the las file is wrapped. This method gets the Wrap Info
+    as well as (2) whether or not the las file is wrapped, ((3) is the header line). 
+    
+    This method gets the Wrap Info.
     """
     if "version information" in versionBlockString.split("\n")[0].lower():
         return versionBlockString.split("\n")[2]
