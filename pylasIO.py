@@ -1,6 +1,7 @@
 import os
 
 
+
 def readLasFile(path:str) -> str:
     """
     Reads a .las file and returns as one big string.
@@ -14,4 +15,3 @@ def readLasFile(path:str) -> str:
             print(e, "\n\n[readLasFile]::Error reading .las file!\n\n", repr(e))
     else:
         raise Exception("File supplied is not a .las file!")
-

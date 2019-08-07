@@ -2,6 +2,7 @@ from pylasClasses import PylasDict
 import pylasRegex
 
 
+
 def createObjectFromLasString(singleLineString:str) -> dict:
     """
     TLDR;Separates each piece of a SINGLE las file line into an object/dict that can be
@@ -33,6 +34,7 @@ def createObjectFromLasString(singleLineString:str) -> dict:
     except Exception as e:
         base_error_message = "\n\n[createObjectFromLasString]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
         print(e, base_error_message, repr(e))
+
 
 
 def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
@@ -69,6 +71,7 @@ def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
         raise e
 
 
+
 def getVersionLine(versionBlockString:str) -> str:
     """ 
     TODO:Should be renamed to 'getLasFileVersionLine' or something like it..
@@ -80,6 +83,7 @@ def getVersionLine(versionBlockString:str) -> str:
         return versionBlockString.split("\n")[1]
     else:
         raise Exception("[getVersionLine]::Incorrect version string supplied!")
+
 
 
 def getWrapLine(versionBlockString:str) -> str:
