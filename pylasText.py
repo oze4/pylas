@@ -2,8 +2,7 @@ from pylasClasses import PylasDict
 import pylasRegex
 
 
-
-def createObjectFromLasString(singleLineString:str) -> dict:
+def lasLineToDict(singleLineString: str) -> dict:
     """
     TLDR;Separates each piece of a SINGLE las file line into an object/dict that can be
     appended to a larger object.  
@@ -21,23 +20,22 @@ def createObjectFromLasString(singleLineString:str) -> dict:
 
         output = {}
         if mnem:
-            output["Mnemonic"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(mnem)
+            output["Mnemonic"] = pylasRegex.trimMultipleSpaces(mnem)
         if val:
-            output["Value"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(val)
+            output["Value"] = pylasRegex.trimMultipleSpaces(val)
         if units:
-            output["Unit"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(units)
+            output["Unit"] = pylasRegex.trimMultipleSpaces(units)
         if desc:
-            output["Description"] = pylasRegex.replaceMultipleSpacesWithSingleSpace(desc)
+            output["Description"] = pylasRegex.trimMultipleSpaces(desc)
 
         return PylasDict(output)
 
     except Exception as e:
-        base_error_message = "\n\n[createObjectFromLasString]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
+        base_error_message = "\n\n[lasLineToDict]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
         print(e, base_error_message, repr(e))
 
 
-
-def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
+def splitLasSections(lasFileString: str) -> dict:
     """
     Separates each section of the entire las file into raw strings according to the
     type of data the section holds.
@@ -71,8 +69,7 @@ def splitLasSectionsIntoBlockStrings(lasFileString:str) -> dict:
         raise e
 
 
-
-def getVersionLine(versionBlockString:str) -> str:
+def getVersionLine(versionBlockString: str) -> str:
     """ 
     TODO:Should be renamed to 'getLasFileVersionLine' or something like it..
 
@@ -85,8 +82,7 @@ def getVersionLine(versionBlockString:str) -> str:
         raise Exception("[getVersionLine]::Incorrect version string supplied!")
 
 
-
-def getWrapLine(versionBlockString:str) -> str:
+def getWrapLine(versionBlockString: str) -> str:
     """ 
     The raw version information is 3 lines, which contain the (1) las file version
     as well as (2) whether or not the las file is wrapped. This method gets the Wrap Info
