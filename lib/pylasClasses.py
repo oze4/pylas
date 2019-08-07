@@ -15,6 +15,9 @@ class PylasDict(dict):
 
 
 class PylasSectionType(Enum):
+    """
+    This class is used to validate certain parameters on other methods. Pseudo 'type validation'.
+    """
     well_information_bock = "well information block"
     curve_information = "curve information"
     curve_data = "a  "
