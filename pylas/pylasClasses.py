@@ -20,3 +20,12 @@ class PylasSectionType(Enum):
     well_information_bock = "well information block"
     curve_information = "curve information"
     curve_data = "a  "
+
+
+class PylasAsListOrDict(Enum):
+    """
+    This class is used for validating parameter types when converting a las section/block to object.
+    Used in pylasCore -> __convertSectionStringToListOrDict(...)
+    """
+    as_list = "list"
+    as_dict = "dict"

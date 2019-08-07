@@ -1,5 +1,5 @@
-from pylasClasses import PylasDict
-import pylasRegex
+from pylas.pylasClasses import PylasDict
+from pylas import pylasRegex
 
 
 def lasLineToDict(singleLineString: str) -> dict:
