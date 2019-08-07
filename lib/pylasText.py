@@ -37,8 +37,8 @@ def lasLineToDict(singleLineString: str) -> dict:
 
 def splitLasSections(lasFileString: str) -> dict:
     """
-    Separates each section of the entire las file into raw strings according to the
-    type of data the section holds.
+    Separates each section of the entire las file into raw strings and adds them as attributes on a dict.
+    This makes it easier to parse each las section, as outlined by the CWLS standard.
     """
     try:
         split = []
