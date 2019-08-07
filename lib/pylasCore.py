@@ -4,8 +4,7 @@ import pylasText
 
 
 def convertWrapLineToObject(rawWrapLine: str) -> dict:
-    """ ~~~ TODO: could most likely create one method to dynamically handle this method as well as `convertVersionLineToObject`,
-                  similar to how I am using `__convertSectionStringToObject` ~~~
+    """
     :param str rawWrapLine: The raw string (from the Version Information block) which contains the Wrap info
 
     Converts the Wrap line from the Version Information section/block into an object.
