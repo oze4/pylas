@@ -20,8 +20,7 @@ def convertWrapLineToObject(rawWrapLine: str) -> dict:
 
 
 def convertVersionLineToObject(rawVersionLine: str) -> dict:
-    """ ~~~ TODO: could most likely create one method to dynamically handle this method as well as `convertWrapLineToObject`, 
-                  similar to how I am using `__convertSectionStringToObject` ~~~
+    """
     :param str rawVersionLine: The raw string (from the Version Information block) which contains the las file Version info
 
     Converts the actual las file Version line from the Version Information section/block into an object.
