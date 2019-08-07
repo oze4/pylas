@@ -1,6 +1,0 @@
-//TODO: complete this
-{
-    WellInformation: {
-
-    }
-}
