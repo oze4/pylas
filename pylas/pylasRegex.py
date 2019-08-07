@@ -27,7 +27,7 @@ def trimMultipleSpaces(string: str) -> str:
     return ' '.join(string.split()).strip()
 
 
-def getMnemonicKeyFromString(string: str) -> list:
+def getMnemonicKeyFromString(string: str) -> str:
     """
     Grabs the mnemonic from a las file line. In the following example, "UWI" is returned:
     "UWI.           37-129-28930-00-01: UNIQUE WELL ID"
@@ -36,7 +36,7 @@ def getMnemonicKeyFromString(string: str) -> list:
     return getMatch(res)
 
 
-def getMnemonicValueFromString(string: str) -> list:
+def getMnemonicValueFromString(string: str) -> str:
     """ 
     Other possible solutions:
       >>    [original solution] (?<=. ).*?(?=:)
@@ -49,7 +49,7 @@ def getMnemonicValueFromString(string: str) -> list:
     return getMatch(res)
 
 
-def getDescriptionFromString(string: str) -> list:
+def getDescriptionFromString(string: str) -> str:
     """
     Grabs the description from a las file line. In the following example, "UNIQUE WELL ID" is returned:
     "UWI.           37-129-28930-00-01: UNIQUE WELL ID"
@@ -58,7 +58,7 @@ def getDescriptionFromString(string: str) -> list:
     return getMatch(res)
 
 
-def getUnitsFromString(string: str) -> list:
+def getUnitsFromString(string: str) -> str:
     """
     Grabs the units (unit of measurement) from a las file line. In the following example, "FT" is returned:
     "STRT.FT              8295.5000: START DEPTH"
