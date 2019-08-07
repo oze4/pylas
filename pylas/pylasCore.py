@@ -6,7 +6,11 @@ from pylas import pylasText
 def __convertSectionStringToObject(rawSectionString: str, startsWith: PylasSectionType, outputAs: PylasAsListOrDict) -> dict:  # OR -> list
     """
     :param str rawSectionString: The raw las section as a string
-    :param PylasSectionType (Enum) startsWith: The LOWER CASE section
+    :param PylasSectionType (Enum) startsWith: The LOWER CASE section header
+        - for example: 
+            - 'well information block' for well info
+            - 'curve information' for curve info
+            - 'a  ' for curve DATA - 2 spaces after 'a' are required!
     :param PylasAsListOrDict (Enum) outputAs: The output formatting of the newly created object
     :returns [dict|list]: Depending upon which parameter you use
 
@@ -56,6 +60,14 @@ def __sectionStringToList(rawSectionString: str) -> list:
         if len(list(out.keys())) > 0:
             output.append(out)
     return output
+
+
+def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list(dict):
+    if 1 == 1:
+        pass
+    else:
+        err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
+        raise Exception(err)
 
 
 def convertWrapLineToObject(rawWrapLine: str) -> dict:
