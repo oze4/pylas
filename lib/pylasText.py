@@ -71,8 +71,6 @@ def splitLasSections(lasFileString: str) -> dict:
 
 def getVersionLine(versionBlockString: str) -> str:
     """ 
-    TODO:Should be renamed to 'getLasFileVersionLine' or something like it..
-
     The raw version information is 3 lines, which contain the (1) las file version
     as well as (2) whether or not the las file is wrapped. This method gets the Version Info
     """
