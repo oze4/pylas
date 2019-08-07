@@ -1,2 +1,4 @@
+# .las/.LAS files show up in GitHub as the language 'Lasso' -
+# this prevents that language from showing up on the repo.
 *.las linguist-detectable=false
 *.LAS linguist-detectable=false
