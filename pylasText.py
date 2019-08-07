@@ -4,7 +4,7 @@ import pylasRegex
 
 def createObjectFromLasString(singleLineString:str) -> dict:
     """
-    TLDR;Separates each piece of a las file line into an object/dict that can be
+    TLDR;Separates each piece of a SINGLE las file line into an object/dict that can be
     appended to a larger object.  
 
     This method takes a single line from a las file heading and puts 
