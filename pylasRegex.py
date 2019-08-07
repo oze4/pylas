@@ -67,5 +67,3 @@ def getUnitsFromString(string:str) -> list:
     return getMatch(res)
 
 
-k = getMnemonicValueFromString(test_string_for_regex3)
-print(k)
