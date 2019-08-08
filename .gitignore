@@ -1,5 +1,7 @@
 __pycache__/
 __pycache__
+las_files
+las_files/
 .venv
 .vscode
 .venv/*.*
