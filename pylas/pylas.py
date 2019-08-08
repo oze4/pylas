@@ -11,6 +11,7 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
     try:
         fullLasFileString = pylasIO.readLasFile(lasFilePath)
         sections = pylasText.splitLasSections(fullLasFileString)
+        
         versionString = pylasText.getVersionLine(sections.VersionInformation)
         versionInfoObject = pylasCore.convertVersionLineToObject(versionString)
         wrapString = pylasText.getWrapLine(sections.VersionInformation)
@@ -18,7 +19,7 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
 
         # ONLY PROCESS LAS FILE IF IT IS NOT WRAPPED!!
         # We currently do not support wrapped .las files
-        if wrapInfoObject.Value == "NO":
+        if wrapInfoObject.Value == "NO":            
             wellInfoObject = pylasCore.convertWellInfoToDict(sections.WellInformation)
             curveInfoObject = pylasCore.convertCurveInfoToDict(sections.CurveInformation)
             curvesDataObject = pylasCore.convertCurveDataToListOfDicts(sections.Curves)
