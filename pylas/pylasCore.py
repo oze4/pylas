@@ -1,6 +1,127 @@
-from pylas.pylasClasses import PylasSectionType, PylasAsListOrDict, PylasDict
+from .pylasClasses import PylasSectionType, PylasAsListOrDict, PylasDict
 from pylas import pylasRegex
 from pylas import pylasText
+
+
+def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list:
+    """
+    :param str curveDataSectionString: curve data section as a string
+
+    Converts las curve data section/block (looks like a table at the bottom of a las file) into a list of dicts, 
+    each curve will be its own dict in the list.
+    """    
+    try:         
+        if curveDataSectionString.lower().startswith(PylasSectionType.curve_data.value):
+            curves = []
+            curvesStringList = curveDataSectionString.split("\n")
+            curvesHeaderList = pylasRegex.trimMultipleSpaces(curvesStringList[0]).split(" ")
+            
+            for name in curvesHeaderList:
+                curveObj = {}
+                if name.strip().lower() != "a":
+                    curveObj["name"] = name
+                    curveObj["data"] = []
+                    curves.append(PylasDict(curveObj))
+            
+            curvesStringBody = curvesStringList
+            curvesStringBody.pop(0)  # Remove first item in list (this removes the header row so we can parse curve values)
+
+            for i in range(len(curvesStringBody)):
+                bodyLineString = pylasRegex.trimMultipleSpaces(curvesStringBody[i])
+                bodyLineList = bodyLineString.split(" ")
+                for index, val in enumerate(bodyLineList):
+                    curves[index].data.append(val)
+
+            return curves
+
+        else:
+            err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
+            raise Exception(err)
+
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        base_err_message = f"[convertCurveDataToListOfDicts]::[ERROR] Something went wrong converting curve data to list of dicts! At line {exc_tb.tb_lineno}"
+        print(base_err_message, repr(e))
+
+
+def convertWrapLineToObject(rawWrapLine: str) -> dict:
+    """
+    :param str rawWrapLine: The raw string (from the Version Information block) which contains the Wrap info
+
+    Converts the Wrap line from the Version Information section/block into an object.
+    """
+    trimmed = rawWrapLine.strip()
+    if trimmed.startswith("WRAP."):
+        cleanedString = pylasRegex.trimMultipleSpaces(trimmed)
+        output =  pylasText.lasLineToDict(cleanedString)
+        return PylasDict(output)
+    else:
+        err = "[convertWrapLineToObject]::Incorrect raw Wrap line supplied!"
+        raise Exception(err)
+
+
+def convertVersionLineToObject(rawVersionLine: str) -> dict:
+    """
+    :param str rawVersionLine: The raw string (from the Version Information block) which contains the las file Version info
+
+    Converts the actual las file Version line from the Version Information section/block into an object.
+    """
+    trimmed = rawVersionLine.strip()
+    if trimmed.startswith("VERS."):
+        cleanedString = pylasRegex.trimMultipleSpaces(trimmed)
+        output = pylasText.lasLineToDict(cleanedString)
+        return PylasDict(output)
+    else:
+        err = "[convertVersionLineToObject]::Incorrect raw Version line supplied!"
+        raise Exception(err)
+
+
+def convertCurveInfoToDict(rawCurveInfoSectionString: str) -> dict:
+    """
+    :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
+
+    Converts raw Curve Information section/block to dict
+    """
+    section = PylasSectionType.curve_information
+    out_as = PylasAsListOrDict.as_dict
+    output = __convertSectionStringToObject(rawCurveInfoSectionString, section, out_as)
+    return PylasDict(output)
+
+
+def convertCurveInfoToList(rawCurveInfoSectionString: str) -> list:
+    """
+    :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
+
+    Converts raw Curve Information section/block to a list    
+    """
+    section = PylasSectionType.curve_information
+    out_as = PylasAsListOrDict.as_list
+    output = __convertSectionStringToObject(rawCurveInfoSectionString, section, out_as)
+    return PylasDict(output)
+
+
+def convertWellInfoToList(rawWellInfoSectionString: str) -> dict:
+    """
+    :param str rawWellInfoSectionString: The raw string for the Well Information section/block
+
+    Converts raw Well Information section/block to a list
+    """
+    section = PylasSectionType.well_information_bock
+    out_as = PylasAsListOrDict.as_list  # output as list
+    output = __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
+    return PylasDict(output)
+
+
+def convertWellInfoToDict(rawWellInfoSectionString: str) -> dict:
+    """
+    :param str rawWellInfoSectionString: The raw string for the Well Information section/block
+
+    Converts raw Well Information section/block to a dict
+    """
+    section = PylasSectionType.well_information_bock
+    out_as = PylasAsListOrDict.as_dict  # output as dict
+    output = __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
+    return PylasDict(output)
 
 
 def __convertSectionStringToObject(rawSectionString: str, startsWith: PylasSectionType, outputAs: PylasAsListOrDict) -> dict:  # OR -> list
@@ -30,9 +151,9 @@ def __convertSectionStringToObject(rawSectionString: str, startsWith: PylasSecti
 
     if rawSectionString.lower().startswith(startsWith.value):
         if outputAs.value == "dict":
-            return __sectionStringToDict(rawSectionString)
+            return PylasDict(__sectionStringToDict(rawSectionString))
         if outputAs.value == "list":
-            return __sectionStringToList(rawSectionString)
+            return PylasDict(__sectionStringToList(rawSectionString))
     else:
         exception = f"[__convertSectionStringToObject[{startsWith.value}]]::Unable to convert section to object!"
         raise Exception(exception)
@@ -59,86 +180,5 @@ def __sectionStringToList(rawSectionString: str) -> list:
         out = pylasText.lasLineToDict(line)
         if len(list(out.keys())) > 0:
             output.append(out)
-    return output
-
-
-def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list(dict):
-    if 1 == 1:
-        pass
-    else:
-        err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
-        raise Exception(err)
-
-
-def convertWrapLineToObject(rawWrapLine: str) -> dict:
-    """
-    :param str rawWrapLine: The raw string (from the Version Information block) which contains the Wrap info
-
-    Converts the Wrap line from the Version Information section/block into an object.
-    """
-    trimmed = rawWrapLine.strip()
-    if trimmed.startswith("WRAP."):
-        cleanedString = pylasRegex.trimMultipleSpaces(trimmed)
-        return pylasText.lasLineToDict(cleanedString)
-    else:
-        err = "[convertWrapLineToObject]::Incorrect raw Wrap line supplied!"
-        raise Exception(err)
-
-
-def convertVersionLineToObject(rawVersionLine: str) -> dict:
-    """
-    :param str rawVersionLine: The raw string (from the Version Information block) which contains the las file Version info
-
-    Converts the actual las file Version line from the Version Information section/block into an object.
-    """
-    trimmed = rawWrapLine.strip()
-    if trimmed.startswith("VERS."):
-        cleanedString = pylasRegex.trimMultipleSpaces(trimmed)
-        return pylasText.lasLineToDict(cleanedString)
-    else:
-        err = "[convertVersionLineToObject]::Incorrect raw Version line supplied!"
-        raise Exception(err)
-
-
-def convertCurveInfoToDict(rawCurveInfoSectionString: str) -> dict:
-    """
-    :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
-
-    Converts raw Curve Information section/block to dict
-    """
-    section = PylasSectionType.curve_information
-    out_as = PylasAsListOrDict.as_dict
-    return __convertSectionStringToObject(rawCurveInfoSectionString, section, out_as)
-
-
-def convertCurveInfoToList(rawCurveInfoSectionString: str) -> list:
-    """
-    :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
-
-    Converts raw Curve Information section/block to a list    
-    """
-    section = PylasSectionType.curve_information
-    out_as = PylasAsListOrDict.as_list
-    return __convertSectionStringToObject(rawCurveInfoSectionString, section, out_as)
-
-
-def convertWellInfoToList(rawWellInfoSectionString: str) -> dict:
-    """
-    :param str rawWellInfoSectionString: The raw string for the Well Information section/block
-
-    Converts raw Well Information section/block to a list
-    """
-    section = PylasSectionType.well_information_bock
-    out_as = PylasAsListOrDict.as_list  # output as list
-    return __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
-
-
-def convertWellInfoToDict(rawWellInfoSectionString: str) -> dict:
-    """
-    :param str rawWellInfoSectionString: The raw string for the Well Information section/block
-
-    Converts raw Well Information section/block to a dict
-    """
-    section = PylasSectionType.well_information_bock
-    out_as = PylasAsListOrDict.as_dict  # output as dict
-    return __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
+    # Since it is a list, we don't have to apply PylasDict            
+    return output  

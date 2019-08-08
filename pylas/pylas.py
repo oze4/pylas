@@ -1,12 +1,7 @@
-from pylas.pylasClasses import PylasAsListOrDict, PylasDict
+from .pylasClasses import PylasAsListOrDict, PylasDict
 from pylas import pylasIO
 from pylas import pylasText
 from pylas import pylasCore
-
-
-"""
-TODO: Still in progress - finish building out this file
-"""
 
 
 def ConvertLasToJson(lasFilePath: str) -> dict:
@@ -16,14 +11,33 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
     try:
         fullLasFileString = pylasIO.readLasFile(lasFilePath)
         sections = pylasText.splitLasSections(fullLasFileString)
+        versionString = pylasText.getVersionLine(sections.VersionInformation)
+        versionInfoObject = pylasCore.convertVersionLineToObject(versionString)
+        wrapString = pylasText.getWrapLine(sections.VersionInformation)
+        wrapInfoObject = pylasCore.convertWrapLineToObject(wrapString)
 
-        output = {
-            "WellInformationDict": pylasCore.convertWellInfoToDict(sections.WellInformation),
-            "WellInformationList": pylasCore.convertWellInfoToList(sections.WellInformation)
-        }
+        # ONLY PROCESS LAS FILE IF IT IS NOT WRAPPED!!
+        # We currently do not support wrapped .las files
+        if wrapInfoObject.Value == "NO":
+            wellInfoObject = pylasCore.convertWellInfoToDict(sections.WellInformation)
+            curveInfoObject = pylasCore.convertCurveInfoToDict(sections.CurveInformation)
+            curvesDataObject = pylasCore.convertCurveDataToListOfDicts(sections.Curves)
 
-        return PylasDict(output)
+            output = {
+                "VersionInformation": {
+                    "Version": versionInfoObject,
+                    "Wrap": wrapInfoObject
+                },
+                "WellInformation": wellInfoObject,
+                "CurveInformation": curveInfoObject,
+                "Curves": curvesDataObject
+            }
+
+            return PylasDict(output)
+
+        else:
+            print(f"[SKIPPING]::Wrapped .las file found! '{lasFilePath}'")
 
     except Exception as e:
-        base_error_message = "\n\nSomething went wrong converting las to json!\n\n"
+        base_error_message = f"\n\nSomething went wrong converting las to json!\n\n[FilePath]:: '{lasFilePath}'"
         print(e, base_error_message, repr(e))
