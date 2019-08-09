@@ -56,7 +56,7 @@ def splitLasSections(lasFileString: str) -> dict:
                 sectionStrings["WellInformation"] = line
             elif "curve information" in lowercase_line:
                 sectionStrings["CurveInformation"] = line
-            elif "parameter" in lowercase_line:
+            elif "parameter information" in lowercase_line:
                 sectionStrings["ParameterInformation"] = line
             elif "other" in lowercase_line:
                 sectionStrings["Other"] = line
@@ -66,7 +66,7 @@ def splitLasSections(lasFileString: str) -> dict:
         return PylasDict(sectionStrings)
 
     except Exception as e:
-        raise e
+        print("[splitLasSections]:: Something went wrong!", e, repr(e))
 
 
 def getVersionLine(versionBlockString: str) -> str:

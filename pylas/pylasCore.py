@@ -3,6 +3,37 @@ from pylas import pylasRegex
 from pylas import pylasText
 
 
+def unwrapCurveData(wrappedCurveDataString: str) -> str:
+    """
+    1. A wrapped curve data section can only be max 80 characters
+    2. Each header row of the curve data section starst with a # sign
+    3. Need to count the number of lines with a # sign so I can parse each line of the overall curve data in a loop,
+       and then create sub loops of X length (where X is the number of # signs), so I can concatenate those X number
+       of lines, therefore creating a 'normal' unwrapped line
+    """
+    try:
+        if not wrappedCurveDataString.lower().startswith(PylasSectionType.curve_data.value):
+            err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
+            raise Exception(err)
+        
+        header_line_count = 0
+        curves_string_list = wrappedCurveDataString.split("\n")
+
+        for line in curves_string_list:
+            if line.lower().startswith(PylasSectionType.curve_data.value):  # This is for the '~A  Depth' header line, which is usually on its own line
+                header_line_count = header_line_count + 1
+                print(line)
+            elif line.startswith("#"):    # This is for all other header lines
+                header_line_count = header_line_count + 1
+                print(line)
+            else:
+                break
+
+        return header_line_count
+    except Exception as e:
+        return e
+
+
 def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list:
     """
     :param str curveDataSectionString: curve data section as a string
@@ -78,7 +109,7 @@ def convertCurveInfoToDict(rawCurveInfoSectionString: str) -> dict:
     """
     :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
 
-    Converts raw Curve Information section/block to dict
+    Converts a single line from raw Curve Information section/block to dict
     """
     section = PylasSectionType.curve_information
     out_as = PylasAsListOrDict.as_dict
@@ -90,7 +121,7 @@ def convertCurveInfoToList(rawCurveInfoSectionString: str) -> list:
     """
     :param str rawCurveInfoSectionString: The raw string for the Curve Information section/block
 
-    Converts raw Curve Information section/block to a list    
+    Converts a single line from raw Curve Information section/block to a list    
     """
     section = PylasSectionType.curve_information
     out_as = PylasAsListOrDict.as_list
@@ -102,7 +133,7 @@ def convertWellInfoToList(rawWellInfoSectionString: str) -> dict:
     """
     :param str rawWellInfoSectionString: The raw string for the Well Information section/block
 
-    Converts raw Well Information section/block to a list
+    Converts a single line from raw Well Information section/block to a list
     """
     section = PylasSectionType.well_information_bock
     out_as = PylasAsListOrDict.as_list  # output as list
@@ -114,11 +145,23 @@ def convertWellInfoToDict(rawWellInfoSectionString: str) -> dict:
     """
     :param str rawWellInfoSectionString: The raw string for the Well Information section/block
 
-    Converts raw Well Information section/block to a dict
+    Converts a single line from raw Well Information section/block to a dict
     """
     section = PylasSectionType.well_information_bock
     out_as = PylasAsListOrDict.as_dict  # output as dict
     output = __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
+    return PylasDict(output)
+
+
+def convertParameterInfoToDict(rawParameterInfoSectionString: str) -> dict:
+    """
+    :param str rawParameterInfoSectionString: The raw string for the Parameter Information Block
+
+    Converts a single line from raw Parameter Information section/block to a dict    
+    """
+    section = PylasSectionType.parameter_information_block
+    out_as = PylasAsListOrDict.as_dict
+    output = __convertSectionStringToObject(rawParameterInfoSectionString, section, out_as)
     return PylasDict(output)
 
 

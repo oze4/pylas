@@ -8,7 +8,7 @@ def readLasFile(path: str) -> str:
     Reads a .las file and returns as one big string.
     """
     file_extension = os.path.splitext(path)[1]
-    if file_extension != ".las":
+    if str(file_extension).lower() != ".las":
         raise Exception("File supplied is not a .las file!")
     else:
         try:

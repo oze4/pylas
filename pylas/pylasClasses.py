@@ -19,6 +19,7 @@ class PylasSectionType(Enum):
     """
     well_information_bock = "well information block"
     curve_information = "curve information"
+    parameter_information_block = "parameter information block"
     curve_data = "a  "
 
 
