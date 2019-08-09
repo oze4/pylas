@@ -1,3 +1,5 @@
+import sys
+
 from .pylasClasses import PylasSectionType, PylasAsListOrDict, PylasDict
 from pylas import pylasRegex
 from pylas import pylasText
@@ -5,6 +7,9 @@ from pylas import pylasText
 
 def unwrapCurveData(wrappedCurveDataString: str) -> str:
     """
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    TODO: FIX THIS METHOD IT IS BROKEN AND EATS ALL YOUR RAM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     :param str wrappedCurveDataString: wrapped curves data (ascii log data) as a string
 
     Takes the wrapped ASCII Log Data (Curves Data) and unwraps it.  The idea behind this is to count the number of header lines, so we 
@@ -48,7 +53,7 @@ def unwrapCurveData(wrappedCurveDataString: str) -> str:
 
         return "\n".join(unwrapped)
     except Exception as e:
-        return e
+        raise e
 
 
 def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list:
