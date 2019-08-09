@@ -5,31 +5,48 @@ from pylas import pylasText
 
 def unwrapCurveData(wrappedCurveDataString: str) -> str:
     """
-    1. A wrapped curve data section can only be max 80 characters
-    2. Each header row of the curve data section starst with a # sign
-    3. Need to count the number of lines with a # sign so I can parse each line of the overall curve data in a loop,
-       and then create sub loops of X length (where X is the number of # signs), so I can concatenate those X number
-       of lines, therefore creating a 'normal' unwrapped line
+    :param str wrappedCurveDataString: wrapped curves data (ascii log data) as a string
+
+    Takes the wrapped ASCII Log Data (Curves Data) and unwraps it.  The idea behind this is to count the number of header lines, so we 
+    know how many lines to select for each wrapped row.  Header lines start with '#', which helps us count the number of actual header 
+    lines.  
+    
+    Once we get the number of header lines, and concatenate the headers into one line, we make a loop through each line of the entire 
+    wrapped curves section, AFTER SKIPPING X LINES - the lines we skip are the header lines (since we already looped through them).
     """
     try:
         if not wrappedCurveDataString.lower().startswith(PylasSectionType.curve_data.value):
-            err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
+            err = "\n\n[unwrapCurveData]::Incorrect Curve Data section string supplied!\n\n"
             raise Exception(err)
         
-        header_line_count = 0
         curves_string_list = wrappedCurveDataString.split("\n")
-
+        unwrapped = [] # This is our main curves object, which we output
+        header_data = PylasDict({ "count": 0, "headerLine": "" })
         for line in curves_string_list:
-            if line.lower().startswith(PylasSectionType.curve_data.value):  # This is for the '~A  Depth' header line, which is usually on its own line
-                header_line_count = header_line_count + 1
-                print(line)
-            elif line.startswith("#"):    # This is for all other header lines
-                header_line_count = header_line_count + 1
-                print(line)
-            else:
+            if line.lower().startswith(PylasSectionType.curve_data.value): # This is for the '~A  Depth' header line, which is usually on its own line
+                header_data.count += 1 
+                header_data.headerLine += line.strip()
+            elif line.startswith("#"): # This is for all other header lines
+                header_data.count += 1
+                header_data.headerLine += pylasRegex.trimMultipleSpaces(line).replace("#", "")
+            else: # Break out of the loop once we process the header lines ONLY
+                if header_data.headerLine != "":
+                    unwrapped.append(header_data.headerLine)
                 break
+        
+        curves_string_list_no_header = curves_string_list[header_data.count::] # Skips the header lines using header count from above to skip X lines,
+        wrapped_line_items = []                                                # ^^^ [header_data.count::] is like saying [7::] (skips 7 lines)
+        line_count = 0
+        for line in curves_string_list_no_header:
+            line_count += 1
+            wrapped_line_items.append(pylasRegex.trimMultipleSpaces(line))            
+            if line_count == header_data.count: # We want to grab as many lines as there are headers, so the shape of our table is accurate. Each 'column' (aka header) needs a value, so to speak
+                unwrapped_line = " ".join(wrapped_line_items) # <-- Join line items back into a single line. Due to spacing it was easier to store each item on a line in a list, then join by " "
+                unwrapped.append(unwrapped_line)              # <-- Append each concatenated line to our overall curves string   
+                line_count = 0                                # <-- Reset line count so we can concatenate the next line
+                unwrapped_line_items = []                     # <-- Reset our line items so we can concatenate the next line                         
 
-        return header_line_count
+        return "\n".join(unwrapped)
     except Exception as e:
         return e
 

@@ -66,8 +66,8 @@ def ConvertLasToJsonWRAPPED(lasFilePath: str) -> dict:
         if wrapInfoObject.Value == "YES":
             wellInfoObject = pylasCore.convertWellInfoToDict(sections.WellInformation)
             curveInfoObject = pylasCore.convertCurveInfoToDict(sections.CurveInformation)
-            wrapped_curves_data = pylasCore.unwrapCurveData(sections.Curves)
-            #curvesDataObject = pylasCore.convertCurveDataToListOfDicts(wrapped_curves_data)
+            unwrapped_curves_data = pylasCore.unwrapCurveData(sections.Curves)
+            curvesDataObject = pylasCore.convertCurveDataToListOfDicts(unwrapped_curves_data)
 
             staged_output = {
                 "VersionInformation": {
@@ -76,7 +76,7 @@ def ConvertLasToJsonWRAPPED(lasFilePath: str) -> dict:
                 },
                 "WellInformation": wellInfoObject,
                 "CurveInformation": curveInfoObject,
-                "Curves": wrapped_curves_data#curvesDataObject
+                "Curves": unwrapped_curves_data#curvesDataObject
             }
 
             if "ParameterInformation" in sections.keys():
@@ -91,3 +91,4 @@ def ConvertLasToJsonWRAPPED(lasFilePath: str) -> dict:
     except Exception as e:
         base_error_message = f"\n\nSomething went wrong converting las to json!\n\n[FilePath]:: '{lasFilePath}'"
         print(e, base_error_message, repr(e))
+ 
