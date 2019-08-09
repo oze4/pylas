@@ -35,8 +35,8 @@ def unwrapCurveData(wrappedCurveDataString: str) -> str:
                 header_data.count += 1
                 header_data.headerLine += pylasRegex.trimMultipleSpaces(line).replace("#", "")
             else: # Break out of the loop once we process the header lines ONLY
-                #if header_data.headerLine != "":
-                unwrapped.append(header_data.headerLine)
+                if header_data.headerLine != "":
+                    unwrapped.append(header_data.headerLine)
                 break
         
         curves_string_list_no_header = curves_string_list[header_data.count::] # Skips the header lines using header count from above to skip X lines,
