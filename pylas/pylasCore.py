@@ -35,8 +35,8 @@ def unwrapCurveData(wrappedCurveDataString: str) -> str:
                 header_data.count += 1
                 header_data.headerLine += pylasRegex.trimMultipleSpaces(line).replace("#", "")
             else: # Break out of the loop once we process the header lines ONLY
-                if header_data.headerLine != "":
-                    unwrapped.append(header_data.headerLine)
+                #if header_data.headerLine != "":
+                unwrapped.append(header_data.headerLine)
                 break
         
         curves_string_list_no_header = curves_string_list[header_data.count::] # Skips the header lines using header count from above to skip X lines,
@@ -49,7 +49,7 @@ def unwrapCurveData(wrappedCurveDataString: str) -> str:
                 unwrapped_line = " ".join(wrapped_line_items) # <-- Join line items back into a single line. Due to spacing it was easier to store each item on a line in a list, then join by " "
                 unwrapped.append(unwrapped_line)              # <-- Append each concatenated line to our overall curves string   
                 line_count = 0                                # <-- Reset line count so we can concatenate the next line
-                unwrapped_line_items = []                     # <-- Reset our line items so we can concatenate the next line                         
+                wrapped_line_items = []                     # <-- Reset our line items so we can concatenate the next line                         
 
         return "\n".join(unwrapped)
     except Exception as e:

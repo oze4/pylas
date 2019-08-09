@@ -17,3 +17,9 @@ def readLasFile(path: str) -> str:
         except Exception as e:
             err = "\n\n[readLasFile]::Error reading .las file!\n\n"
             print(e, err, repr(e))                
+
+
+def saveJsonData(path: str, jsonData: dict) -> None:
+    import json
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(jsonData, f, ensure_ascii=False, indent=4)

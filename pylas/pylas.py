@@ -67,7 +67,7 @@ def ConvertLasToJsonWRAPPED(lasFilePath: str) -> dict:
             wellInfoObject = pylasCore.convertWellInfoToDict(sections.WellInformation)
             curveInfoObject = pylasCore.convertCurveInfoToDict(sections.CurveInformation)
             unwrapped_curves_data = pylasCore.unwrapCurveData(sections.Curves)
-            #curvesDataObject = pylasCore.convertCurveDataToListOfDicts(unwrapped_curves_data)
+            curvesDataObject = pylasCore.convertCurveDataToListOfDicts(unwrapped_curves_data)
 
             staged_output = {
                 "VersionInformation": {
@@ -76,7 +76,7 @@ def ConvertLasToJsonWRAPPED(lasFilePath: str) -> dict:
                 },
                 "WellInformation": wellInfoObject,
                 "CurveInformation": curveInfoObject,
-                "Curves": unwrapped_curves_data#curvesDataObject
+                "Curves": curvesDataObject#unwrapped_curves_data
             }
 
             if "ParameterInformation" in sections.keys():
