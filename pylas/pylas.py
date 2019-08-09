@@ -33,9 +33,8 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
                 "CurveInformation": curveInfoObject,
                 "Curves": curvesDataObject
             }
-
             return PylasDict(output)
-
+        
         else:
             print(f"[SKIPPING]::Wrapped .las file found! '{lasFilePath}'")
 
