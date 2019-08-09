@@ -7,22 +7,25 @@ def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list:
     """
     :param str curveDataSectionString: curve data section as a string
 
-    Converts las curve data section/block (looks like a table at the bottom of a las file) into a list of dicts, 
+    Converts las curve data section/block (the table at the bottom of a las file) into a list of dicts, 
     each curve will be its own dict in the list.
     """    
     try:         
-        if curveDataSectionString.lower().startswith(PylasSectionType.curve_data.value):
+        if not curveDataSectionString.lower().startswith(PylasSectionType.curve_data.value):
+            err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
+            raise Exception(err)
+        else:
             curves = []
             curvesStringList = curveDataSectionString.split("\n")
             curvesHeaderList = pylasRegex.trimMultipleSpaces(curvesStringList[0]).split(" ")
-            
+
             for name in curvesHeaderList:
                 curveObj = {}
                 if name.strip().lower() != "a":
                     curveObj["name"] = name
                     curveObj["data"] = []
                     curves.append(PylasDict(curveObj))
-            
+
             curvesStringBody = curvesStringList
             curvesStringBody.pop(0)  # Remove first item in list (this removes the header row so we can parse curve values)
 
@@ -33,11 +36,6 @@ def convertCurveDataToListOfDicts(curveDataSectionString: str) -> list:
                     curves[index].data.append(val)
 
             return curves
-
-        else:
-            err = "\n\n[convertCurveDataToListOfDicts]::Incorrect Curve Data section string supplied!\n\n"
-            raise Exception(err)
-
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         base_err_message = f"[convertCurveDataToListOfDicts]::[ERROR] Something went wrong converting curve data to list of dicts! At line {exc_tb.tb_lineno}"
