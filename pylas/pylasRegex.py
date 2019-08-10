@@ -1,12 +1,6 @@
 import re
 
 
-test_string_for_regex1 = "UWI.           37-129-28930-00-01: UNIQUE WELL ID"
-test_string_for_regex2 = "LOC.           Lat 40.426716--Long -79.54976: LOCATION"
-test_string_for_regex3 = "STRT.FT              8295.5000: START DEPTH"
-test_string_for_regex4 = "LOC.           Lat: 40.487717--Long: -80.733858----: LOCATION"
-
-
 def getMatch(regexResults: list) -> str:
     """
     Gets the first result in array of re.findall(...) matches
