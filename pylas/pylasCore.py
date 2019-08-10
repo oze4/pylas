@@ -49,7 +49,7 @@ def unwrapCurveData(wrappedCurveDataString: str) -> str:
                 unwrapped_line = " ".join(wrapped_line_items) # <-- Join line items back into a single line. Due to spacing it was easier to store each item on a line in a list, then join by " "
                 unwrapped.append(unwrapped_line)              # <-- Append each concatenated line to our overall curves string   
                 line_count = 0                                # <-- Reset line count so we can concatenate the next line
-                wrapped_line_items = []                     # <-- Reset our line items so we can concatenate the next line                         
+                wrapped_line_items = []                       # <-- Reset our line items so we can concatenate the next line                         
 
         return "\n".join(unwrapped)
     except Exception as e:
