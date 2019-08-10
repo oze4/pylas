@@ -7,9 +7,6 @@ from pylas import pylasText
 
 def unwrapCurveData(wrappedCurveDataString: str) -> str:
     """
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    TODO: FIX THIS METHOD IT IS BROKEN AND EATS ALL YOUR RAM !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     :param str wrappedCurveDataString: wrapped curves data (ascii log data) as a string
 
     Takes the wrapped ASCII Log Data (Curves Data) and unwraps it.  The idea behind this is to count the number of header lines, so we 
