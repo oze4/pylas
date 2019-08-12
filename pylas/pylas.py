@@ -29,15 +29,6 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
             "CurveInformation": pylasCore.convertCurveInfoToDict(sections.CurveInformation),            
         }
 
-        # If .las file is wrapped
-        if wrapInfoObject.Value == "NO":
-            staged_output["Curves"] = pylasCore.convertCurveDataToListOfDicts(sections.Curves) 
-        # If .las file is unwrapped (not wrapped)
-        elif wrapInfoObject.Value == "YES":
-            unwrapped_curves_data = pylasCore.unwrapCurveData(sections.Curves)
-            curvesDataObject = pylasCore.convertCurveDataToListOfDicts(unwrapped_curves_data)
-            staged_output["Curves"] = curvesDataObject           
-            
         if "ParameterInformation" in sections.keys():
             param_info = pylasCore.convertParameterInfoToDict(sections.ParameterInformation)
             if len(param_info.keys()) > 0:
@@ -46,11 +37,21 @@ def ConvertLasToJson(lasFilePath: str) -> dict:
         if "Other" in sections.keys():
             other_info = pylasCore.convertOtherSection(sections.Other)
             if other_info != "":
-                staged_output["Other"] = other_info
+                staged_output["Other"] = other_info        
+
+        # If .las file is wrapped
+        if wrapInfoObject.Value == "NO":
+            staged_output["Curves"] = pylasCore.convertCurveDataToListOfDicts(sections.Curves) 
+        # If .las file is unwrapped (not wrapped)
+        elif wrapInfoObject.Value == "YES":
+            unwrapped_curves_data = pylasCore.unwrapCurveData(sections.Curves)
+            curvesDataObject = pylasCore.convertCurveDataToListOfDicts(unwrapped_curves_data)
+            staged_output["Curves"] = curvesDataObject                   
 
         # START: RETURN DATA HERE
         return PylasDict(staged_output)
         # END: RETURN DATA HERE
+
     except Exception as e:
         base_error_message = f"\n\nSomething went wrong converting las to json!\n\n[FilePath]:: '{lasFilePath}'"
         print(e, base_error_message, repr(e))
