@@ -50,7 +50,7 @@ def splitLasSections(lasFileString: str) -> dict:
         for i in range(len(split)):
             line = split[i]
             lowercase_line = line.lower()
-            if "version" in lowercase_line:
+            if "version information" in lowercase_line:
                 sectionStrings["VersionInformation"] = line
             elif "well information" in lowercase_line:
                 sectionStrings["WellInformation"] = line

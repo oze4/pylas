@@ -184,6 +184,18 @@ def convertParameterInfoToDict(rawParameterInfoSectionString: str) -> dict:
     return PylasDict(output)
 
 
+def convertOtherSection(rawOtherSectionString: str) -> str:
+    """
+    :param str rawOtherSectionString: The raw string from the Other section/block
+
+    Since the 'Other' section/block has no formatting restrictions (typically they're just strings of info),
+    we just remove the 'OTHER' header and clean up the string a bit by replacing 2 or more spaces with a single space.
+    """
+    clean_string = pylasRegex.trimMultipleSpaces(rawOtherSectionString)
+    final_string = clean_string.replace("OTHER", "", 1)  # Replace only the first occurrence of the word OTHER (aka the header)
+    return final_string.strip()
+
+
 def __convertSectionStringToObject(rawSectionString: str, startsWith: PylasSectionType, outputAs: PylasAsListOrDict) -> dict:  # OR -> list
     """
     :param str rawSectionString: The raw las section as a string
