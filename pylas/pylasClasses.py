@@ -17,9 +17,9 @@ class PylasSectionType(Enum):
     """
     This class is used to validate certain parameters on other methods. Pseudo 'type validation'.
     """
-    well_information_bock = "well information"
+    well_information = "well information"
     curve_information = "curve information"
-    parameter_information_block = "parameter information block"
+    parameter_information = "parameter information"
     curve_data = "a  "
 
 

@@ -154,7 +154,7 @@ def convertWellInfoToList(rawWellInfoSectionString: str) -> dict:
 
     Converts a single line from raw Well Information section/block to a list
     """
-    section = PylasSectionType.well_information_bock
+    section = PylasSectionType.well_information
     out_as = PylasAsListOrDict.as_list  # output as list
     output = __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
     return PylasDict(output)
@@ -166,7 +166,7 @@ def convertWellInfoToDict(rawWellInfoSectionString: str) -> dict:
 
     Converts a single line from raw Well Information section/block to a dict
     """
-    section = PylasSectionType.well_information_bock
+    section = PylasSectionType.well_information
     out_as = PylasAsListOrDict.as_dict  # output as dict
     output = __convertSectionStringToObject(rawWellInfoSectionString, section, out_as)
     return PylasDict(output)
@@ -178,7 +178,7 @@ def convertParameterInfoToDict(rawParameterInfoSectionString: str) -> dict:
 
     Converts a single line from raw Parameter Information section/block to a dict    
     """
-    section = PylasSectionType.parameter_information_block
+    section = PylasSectionType.parameter_information
     out_as = PylasAsListOrDict.as_dict
     output = __convertSectionStringToObject(rawParameterInfoSectionString, section, out_as)
     return PylasDict(output)
