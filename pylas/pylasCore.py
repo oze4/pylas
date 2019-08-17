@@ -238,8 +238,9 @@ def __sectionStringToDict(rawSectionString: str) -> dict:
     output = {}
     for line in rawSectionString.split("\n"):
         out = pylasText.lasLineToDict(line)
-        if len(list(out.keys())) > 0:
-            output[out.Mnemonic] = out
+        if out is not None:
+            if len(list(out.keys())) > 0:
+                output[out.Mnemonic] = out
     return PylasDict(output)
 
 

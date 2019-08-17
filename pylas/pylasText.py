@@ -12,7 +12,9 @@ def lasLineToDict(singleLineString: str) -> dict:
     on an object/dict. That object/dict is what this method returns, which will
     be appended to a larger object/dict.
     """
-    if not singleLineString.startswith("."):
+    if singleLineString.startswith("."):
+        return None
+    else:
         try:
             mnem = pylasRegex.getMnemonicKeyFromString(singleLineString)
             val = pylasRegex.getMnemonicValueFromString(singleLineString)
