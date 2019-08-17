@@ -12,27 +12,28 @@ def lasLineToDict(singleLineString: str) -> dict:
     on an object/dict. That object/dict is what this method returns, which will
     be appended to a larger object/dict.
     """
-    try:
-        mnem = pylasRegex.getMnemonicKeyFromString(singleLineString)
-        val = pylasRegex.getMnemonicValueFromString(singleLineString)
-        units = pylasRegex.getUnitsFromString(singleLineString)
-        desc = pylasRegex.getDescriptionFromString(singleLineString)
+    if not singleLineString.startswith("."):
+        try:
+            mnem = pylasRegex.getMnemonicKeyFromString(singleLineString)
+            val = pylasRegex.getMnemonicValueFromString(singleLineString)
+            units = pylasRegex.getUnitsFromString(singleLineString)
+            desc = pylasRegex.getDescriptionFromString(singleLineString)
 
-        output = {}
-        if mnem:
-            output["Mnemonic"] = pylasRegex.trimMultipleSpaces(mnem)
-        if val:
-            output["Value"] = pylasRegex.trimMultipleSpaces(val)
-        if units:
-            output["Unit"] = pylasRegex.trimMultipleSpaces(units)
-        if desc:
-            output["Description"] = pylasRegex.trimMultipleSpaces(desc)
+            output = {}
+            if mnem:
+                output["Mnemonic"] = pylasRegex.trimMultipleSpaces(mnem)
+            if val:
+                output["Value"] = pylasRegex.trimMultipleSpaces(val)
+            if units:
+                output["Unit"] = pylasRegex.trimMultipleSpaces(units)
+            if desc:
+                output["Description"] = pylasRegex.trimMultipleSpaces(desc)
 
-        return PylasDict(output)
+            return PylasDict(output)
 
-    except Exception as e:
-        base_error_message = "\n\n[lasLineToDict]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
-        print(e, base_error_message, repr(e))
+        except Exception as e:
+            base_error_message = "\n\n[lasLineToDict]::Something went wrong converting singleLineString to {Mnem,Val,Units,Desc} Object\n\n"
+            print(e, base_error_message, repr(e))
 
 
 def splitLasSections(lasFileString: str) -> dict:
